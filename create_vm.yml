@@ -1,0 +1,40 @@
+  - hosts: all 
+    tasks:
+      - set_fact:
+          ovirt_auth:
+            hostname: localhost
+            insecure: yes
+            password: "{{ ovirt_pass }}"
+            username: admin@internal
+        tags: [ vm, ip ]
+      - debug: var=vm_template
+      - name: Create virtual machine 
+        ovirt_vm:
+          auth: "{{ ovirt_auth }}"
+          state: running
+          name: "{{ vm_name }}"
+          description: "Test vm UN"
+          template: "{{ vm_template }}"
+          cluster: Default
+          high_availability: true
+          cpu_cores: 1
+          cpu_sockets: 1
+          memory: 1GiB
+          type: server
+          operating_system: rhel_8x64
+          storage_domain: zby_ceph_iscsi_lun01
+          clone: yes
+          wait: true
+          nics:
+          - name: nic1
+          graphical_console:
+            protocol:
+            - vnc
+          cloud_init:
+            host_name: "{{ vm_name }}.zby.icdc.io" 
+            user_name: root
+            root_password: "{{ vm_pass }}"
+            timezone: "{{ timezone }}"
+          cloud_init_persist: yes
+        register: vm
+        tags: vm
