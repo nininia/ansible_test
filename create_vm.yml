@@ -22,7 +22,7 @@
           memory: 1GiB
           type: server
           operating_system: rhel_8x64
-          storage_domain: zby_ceph_iscsi_lun01
+          storage_domain: xby_ceph_iscsi_lun01
           clone: yes
           wait: true
           nics:
